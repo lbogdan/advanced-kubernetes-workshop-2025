@@ -1,0 +1,24 @@
+controller:
+  hostNetwork: true
+  # hostPort:
+  #   enabled: true
+  kind: DaemonSet
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exists
+  tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+  service:
+    enabled: false
+  extraArgs:
+    publish-status-address: $CP_IP
+  priorityClassName: system-cluster-critical
+  allowSnippetAnnotations: true
+  config:
+    annotations-risk-level: Critical

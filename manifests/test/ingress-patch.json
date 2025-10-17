@@ -1,0 +1,15 @@
+[
+  {
+    "op": "replace",
+    "path": "/spec/rules/0/host",
+    "value": "$HOST"
+  },
+  {
+    "op": "remove",
+    "path": "/metadata/annotations"
+  },
+  {
+    "op": "remove",
+    "path": "/spec/tls"
+  }
+]
