@@ -44,7 +44,7 @@ Install `ingress-nginx` from the [Helm chart](https://kubernetes.github.io/ingre
 After the `ingress-nginx-controller` pod becomes `Ready`, we should see the ingress updated:
 
 ```sh
-# kubectl describe ing test
+kubectl describe ing test
 # Name:             test
 # Labels:           app=test
 # Namespace:        default
