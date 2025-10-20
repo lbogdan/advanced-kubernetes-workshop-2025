@@ -57,8 +57,17 @@ install_rook_ceph() {
   helm upgrade --create-namespace --install "$app_name" --namespace "$namespace" "$repo_name/$chart_name" --values manifests/helm/rook-ceph-values.yaml
 }
 
+install_kube_prometheus_stack() {
+  repo_url='oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack'
+  app_name='kube-prometheus-stack'
+  namespace='monitoring'
+  helm diff upgrade --color --disable-validation --install "$app_name" --namespace "$namespace" "$repo_url" --values manifests/helm/kube-prometheus-stack-values.yaml | less -R
+  helm upgrade --create-namespace --install "$app_name" --namespace "$namespace" "$repo_url" --values manifests/helm/kube-prometheus-stack-values.yaml
+}
+
 # install_metrics_server
 # install_ingress_nginx
 # install_cert_manager
 # create_clusterissuer
-install_rook_ceph
+# install_rook_ceph
+install_kube_prometheus_stack

@@ -26,3 +26,8 @@ grafana:
   serviceMonitor:
     labels:
       release: kube-prometheus-stack
+  adminPassword: prom123
+  ingress:
+    enabled: true
+    hosts:
+    - $HOST # replace
