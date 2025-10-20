@@ -39,7 +39,7 @@ Install `ingress-nginx` from the [Helm chart](https://kubernetes.github.io/ingre
 
 > **Warning**
 >
-> You need to replace $CP_IP in the values file with your control plane IP address.
+> You need to replace $CP_IP in the values file with your control-plane server IP address.
 
 After the `ingress-nginx-controller` pod becomes `Ready`, we should see the ingress updated:
 
@@ -70,7 +70,7 @@ curl http://test.157.180.123.220.nip.io/
 
 Let's now enable TLS for our ingress; in the `manifests/test` folder do the following:
 
-- edit `ingress-patch-tls.json` and replace all `$HOST` occurrences with `test.$CP_IP.nip.io`;
+- edit `ingress-patch-tls.json` and replace all `$HOST` occurrences with `test.$CP_IP.nip.io`, where `$CP_IP` is your control-plane server IP;
 
 - edit `kustomization.yaml` and replace `path: ingress-patch.json` with `path: ingress-patch-tls.json`;
 
