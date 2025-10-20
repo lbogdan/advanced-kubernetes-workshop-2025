@@ -9,7 +9,7 @@ resources:
 #       foo: bar
 
 patches:
-- path: ingress-patch.json # change to ingress-patch-tls.json to enable TLS
+- path: ingress-patch-tls.json # change to ingress-patch-tls.json to enable TLS
   target:
     group: networking.k8s.io
     version: v1

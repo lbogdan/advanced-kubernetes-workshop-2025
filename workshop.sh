@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-CP_IP=''
+CP_IP='157.180.123.220'
 
 install_metrics_server() {
   repo_name='metrics-server'
@@ -29,5 +29,23 @@ install_ingress_nginx() {
   helm upgrade --create-namespace --install "$app_name" --namespace "$namespace" "$repo_name/$chart_name" --values <(echo "$values")
 }
 
+install_cert_manager() {
+  repo_url='oci://quay.io/jetstack/charts/cert-manager'
+  app_name='cert-manager'
+  namespace='cert-manager'
+  version='v1.19.1'
+  # helm diff upgrade --color --install "$app_name" --namespace "$namespace" "$repo_url" --version "$version" --values manifests/helm/cert-manager-values.yaml | less -R
+  helm upgrade --create-namespace --install "$app_name" --namespace "$namespace" "$repo_url" --version "$version" --values manifests/helm/cert-manager-values.yaml
+}
+
+EMAIL='luca.bogdan@gmail.com'
+
+create_clusterissuer() {
+  manifest="$(sed -e "s|\$EMAIL|$EMAIL|" manifests/clusterissuer.yaml)"
+  echo "$manifest" | kubectl apply -f -
+}
+
 # install_metrics_server
-install_ingress_nginx
+# install_ingress_nginx
+# install_cert_manager
+create_clusterissuer
