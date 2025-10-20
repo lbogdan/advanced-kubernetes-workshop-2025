@@ -4,12 +4,13 @@ First, install the app, defined as a [`Kustomize` overlay](https://kubernetes.io
 
 ```sh
 # clone the repository locally
-cd $REPO_PATH/manifests/test
+git clone https://github.com/lbogdan/advanced-kubernetes-workshop-2025.git
+cd advanced-kubernetes-workshop-2025/manifests/test
 # edit ingress-patch.json and replace $HOST with test.$CP_IP.nip.io, e.g. test.157.180.123.220.nip.io
 # check the manifests:
-kubectl kustomize . | less
+kubectl kustomize . | less # or kubectl diff -k .
 # and apply them:
-kubectl apply --server-side -k .
+kubectl apply -k .
 # check the ingress:
 kubectl describe ing test
 # Name:             test
@@ -74,7 +75,7 @@ Let's now enable TLS for our ingress; in the `manifests/test` folder do the foll
 
 - edit `kustomization.yaml` and replace `path: ingress-patch.json` with `path: ingress-patch-tls.json`;
 
-- check (`kubectl diff -k .`) and apply (`kubectl apply --server-side -k .`).
+- check (`kubectl diff -k .`) and apply (`kubectl apply -k .`).
 
 If we now refresh the browser, we'll get redirected to the `https://` URL, but we'll get a `NET::ERR_CERT_AUTHORITY_INVALID` (or similar) error. That's because the `test.157.180.123.220.nip.io-tls` secret doesn't exit, so our ingress controller uses uses its default, self-signed certificate.
 
