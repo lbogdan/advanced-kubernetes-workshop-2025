@@ -31,3 +31,4 @@ grafana:
     enabled: true
     hosts:
     - $HOST # replace
+    ingressClassName: nginx
