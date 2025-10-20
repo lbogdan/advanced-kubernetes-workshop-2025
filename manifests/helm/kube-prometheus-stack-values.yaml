@@ -1,0 +1,28 @@
+alertmanager:
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 100Mi
+
+prometheus:
+  prometheusSpec:
+    externalLabels:
+      cluster: workshop
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 2Gi
+
+grafana:
+  persistence:
+    type: pvc
+    enabled: true
+    size: 100Mi
+  serviceMonitor:
+    labels:
+      release: kube-prometheus-stack

@@ -1,0 +1,5 @@
+image:
+  repository: bitnamilegacy/kubernetes-event-exporter
+
+config:
+  logLevel: info

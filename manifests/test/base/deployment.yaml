@@ -9,7 +9,7 @@ spec:
   template:
     spec:
       containers:
-      - image: gcr.io/kuar-demo/kuard-amd64:blue
+      - image: jmutai/kuard-amd64:blue
         name: kuard-amd64
         volumeMounts:
         - name: data

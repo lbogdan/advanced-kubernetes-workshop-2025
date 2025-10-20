@@ -1,0 +1,20 @@
+dex:
+  enabled: false
+
+applicationSet:
+  enabled: false
+
+notifications:
+  enabled: false
+
+global:
+  domain: $HOST
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+
+configs:
+  params:
+    server.insecure: true

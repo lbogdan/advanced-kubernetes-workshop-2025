@@ -1,7 +1,5 @@
 controller:
   hostNetwork: true
-  # hostPort:
-  #   enabled: true
   kind: DaemonSet
   affinity:
     nodeAffinity:
@@ -19,6 +17,3 @@ controller:
   extraArgs:
     publish-status-address: $CP_IP
   priorityClassName: system-cluster-critical
-  allowSnippetAnnotations: true
-  config:
-    annotations-risk-level: Critical

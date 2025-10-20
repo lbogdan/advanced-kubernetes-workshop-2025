@@ -35,14 +35,11 @@ spec:
     # versions running within the cluster. See tags available at https://hub.docker.com/r/ceph/ceph/tags/.
     # If you want to be more precise, you can always use a timestamp tag such quay.io/ceph/ceph:v17.2.3-20220805
     # This tag might not contain a new Ceph version, just security fixes from the underlying operating system, which will reduce vulnerabilities
-    # image: quay.io/ceph/ceph:v17.2.5
-    # image: quay.io/ceph/ceph:v17.2.6-20230501
-    # image: quay.io/ceph/ceph:v18.2.0-20231010
-    image: quay.io/ceph/ceph:v19.2.0-20240927
+    image: quay.io/ceph/ceph:v19.2.3-20250717
     # Whether to allow unsupported versions of Ceph. Currently `pacific` and `quincy` are supported.
     # Future versions such as `reef` (v18) would require this to be set to `true`.
     # Do not set to true in production.
-    allowUnsupported: false
+    # allowUnsupported: false # default
   # The path on the host where configuration files will be persisted. Must be specified.
   # Important: if you reinstall the cluster, make sure you delete this directory from each host or else the mons will fail to start on the new cluster.
   # In Minikube, the '/data' directory is configured to persist across reboots. Use "/data/rook" in Minikube environment.
@@ -51,9 +48,9 @@ spec:
   # This means Ceph's status could be degraded and we don't recommend upgrading but you might decide otherwise
   # Use at your OWN risk
   # To understand Rook's upgrade process of Ceph, read https://rook.io/docs/rook/latest/ceph-upgrade.html#ceph-version-upgrades
-  skipUpgradeChecks: false
+  # skipUpgradeChecks: false # default
   # Whether or not continue if PGs are not clean during an upgrade
-  continueUpgradeAfterChecksEvenIfNotHealthy: false
+  # continueUpgradeAfterChecksEvenIfNotHealthy: false # default
   # WaitTimeoutForHealthyOSDInMinutes defines the time (in minutes) the operator would wait before an OSD can be stopped for upgrade or restart.
   # If the timeout exceeds and OSD is not ok to stop, then the operator would skip upgrade for the current OSD and proceed with the next one
   # if `continueUpgradeAfterChecksEvenIfNotHealthy` is `false`. If `continueUpgradeAfterChecksEvenIfNotHealthy` is `true`, then operator would
@@ -67,7 +64,7 @@ spec:
     count: 1
     # The mons should be on unique nodes. For production, at least 3 nodes are recommended for this reason.
     # Mons should only be allowed on the same node for test environments where data loss is acceptable.
-    allowMultiplePerNode: false
+    # allowMultiplePerNode: false # default
     # allowMultiplePerNode: true
   mgr:
     # When higher availability of the mgr is needed, increase the count to 2.
@@ -82,6 +79,7 @@ spec:
       # are already enabled by other settings in the cluster CR.
       - name: pg_autoscaler
         enabled: true
+        settings: {}
   # enable the ceph dashboard for viewing cluster status
   dashboard:
     enabled: true
@@ -90,11 +88,11 @@ spec:
     # serve the dashboard at the given port.
     # port: 8443
     # serve the dashboard using SSL
-    ssl: true
+    # ssl: true
   # enable prometheus alerting for cluster
-  monitoring:
+  monitoring: {}
     # requires Prometheus to be pre-installed
-    enabled: false
+    # enabled: false # default
   network:
     connections:
       # Whether to encrypt the data in transit across the wire to prevent eavesdropping the data on the network.
@@ -103,12 +101,12 @@ spec:
       # IMPORTANT: Encryption requires the 5.11 kernel for the latest nbd and cephfs drivers. Alternatively for testing only,
       # you can set the "mounter: rbd-nbd" in the rbd storage class, or "mounter: fuse" in the cephfs storage class.
       # The nbd and fuse drivers are *not* recommended in production since restarting the csi driver pod will disconnect the volumes.
-      encryption:
-        enabled: false
+      encryption: {}
+        # enabled: false # default
       # Whether to compress the data in transit across the wire. The default is false.
       # Requires Ceph Quincy (v17) or newer. Also see the kernel requirements above for encryption.
-      compression:
-        enabled: false
+      compression: {}
+        # enabled: false # default
     # enable host networking
     provider: host
     # enable the Multus network provider
@@ -128,8 +126,8 @@ spec:
     # Ceph daemons to listen on both IPv4 and Ipv6 networks
     #dualStack: false
   # enable the crash collector for ceph daemon crash collection
-  crashCollector:
-    disable: false
+  crashCollector: {}
+  #   disable: false # default
     # Uncomment daysToRetain to prune ceph crash entries older than the
     # specified number of days.
     #daysToRetain: 30
@@ -145,7 +143,7 @@ spec:
     # This value should only be set when the cluster is about to be deleted. After the confirmation is set,
     # Rook will immediately stop configuring the cluster and only wait for the delete command.
     # If the empty string is set, Rook will not destroy any data on hosts during uninstall.
-    confirmation: ""
+    # confirmation: "" # default
     # sanitizeDisks represents settings for sanitizing OSD disks on cluster deletion
     sanitizeDisks:
       # method indicates if the entire disk should be sanitized or simply ceph's metadata
@@ -161,7 +159,7 @@ spec:
       iteration: 1
     # allowUninstallWithVolumes defines how the uninstall should be performed
     # If set to true, cephCluster deletion does not wait for the PVs to be deleted.
-    allowUninstallWithVolumes: false
+    # allowUninstallWithVolumes: false # default
   # To control where various services will be scheduled by kubernetes, use the placement configuration sections below.
   # The example under 'all' would have all services scheduled on kubernetes nodes labeled with 'role=storage-node' and
   # tolerate taints with a key of 'storage-node'.
@@ -184,7 +182,6 @@ spec:
         effect: NoSchedule
     mgr:
       nodeAffinity: {}
-      tolerations: []
 # The above placement information can also be specified for mon, osd, and mgr components
 #    mon:
 # Monitor deployments may contain an anti-affinity rule for avoiding monitor
@@ -240,7 +237,7 @@ spec:
 #    logcollector:
 #    cleanup:
   # The option to automatically remove OSDs that are out and are safe to destroy.
-  removeOSDsIfOutAndSafeToRemove: false
+  # removeOSDsIfOutAndSafeToRemove: false # default
   priorityClassNames:
     #all: rook-ceph-default-priority-class
     mon: system-node-critical
@@ -248,7 +245,7 @@ spec:
     mgr: system-cluster-critical
     #crashcollector: rook-ceph-crashcollector-priority-class
   storage: # cluster level storage configuration and selection
-    useAllNodes: false
+    # useAllNodes: false # default
     useAllDevices: false
     # useAllDevices: true
     #deviceFilter:
@@ -265,6 +262,7 @@ spec:
     - name: $CP_NAME
       devices:
       - name: "sdb"
+      resources: {}
     # - name: staging-node-0
     #   devices:
     #   - name: "sdb"
@@ -298,7 +296,7 @@ spec:
     #   - name: "172.17.4.301"
     #     deviceFilter: "^sd."
     # when onlyApplyOSDPlacement is false, will merge both placement.All() and placement.osd
-    onlyApplyOSDPlacement: false
+    # onlyApplyOSDPlacement: false # default
   # The section for configuring management of daemon disruptions during upgrade or fencing.
   disruptionManagement:
     # If true, the operator will create and manage PodDisruptionBudgets for OSD, Mon, RGW, and MDS daemons. OSD PDBs are managed dynamically
@@ -311,10 +309,10 @@ spec:
     # A duration in minutes that the operator will wait for the placement groups to become healthy (active+clean) after a drain was completed and OSDs came back up.
     # Operator will continue with the next drain if the timeout exceeds. It only works if `managePodBudgets` is `true`.
     # No values or 0 means that the operator will wait until the placement groups are healthy before unblocking the next drain.
-    pgHealthCheckTimeout: 0
+    # pgHealthCheckTimeout: 0 # default
     # If true, the operator will create and manage MachineDisruptionBudgets to ensure OSDs are only fenced when the cluster is healthy.
     # Only available on OpenShift.
-    manageMachineDisruptionBudgets: false
+    # manageMachineDisruptionBudgets: false # default
     # Namespace in which to watch for the MachineDisruptionBudgets.
     machineDisruptionBudgetNamespace: openshift-machine-api
 
@@ -323,27 +321,27 @@ spec:
   healthCheck:
     daemonHealth:
       mon:
-        disabled: false
+        # disabled: false # default
         interval: 45s
       osd:
-        disabled: false
-        interval: 60s
+        # disabled: false # default
+        interval: 1m0s
       status:
-        disabled: false
-        interval: 60s
+        # disabled: false # default
+        interval: 1m0s
     # Change pod liveness probe timing or threshold values. Works for all mon,mgr,osd daemons.
     livenessProbe:
-      mon:
-        disabled: false
-      mgr:
-        disabled: false
-      osd:
-        disabled: false
+      mon: {}
+        # disabled: false # default
+      mgr: {}
+        # disabled: false # default
+      osd: {}
+        # disabled: false # default
     # Change pod startup probe timing or threshold values. Works for all mon,mgr,osd daemons.
     startupProbe:
-      mon:
-        disabled: false
-      mgr:
-        disabled: false
-      osd:
-        disabled: false
+      mon: {}
+        # disabled: false # default
+      mgr: {}
+        # disabled: false # default
+      osd: {}
+        # disabled: false # default
