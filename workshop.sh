@@ -45,7 +45,20 @@ create_clusterissuer() {
   echo "$manifest" | kubectl apply -f -
 }
 
+install_rook_ceph() {
+  repo_name='rook-release'
+  repo_url='https://charts.rook.io/release'
+  app_name='rook-ceph'
+  chart_name='rook-ceph'
+  namespace='rook-ceph'
+  helm repo add "$repo_name" "$repo_url"
+  helm repo update "$repo_name"
+  # helm diff upgrade --color --install "$app_name" --namespace "$namespace" "$repo_name/$chart_name" --values manifests/helm/rook-ceph-values.yaml | less -R
+  helm upgrade --create-namespace --install "$app_name" --namespace "$namespace" "$repo_name/$chart_name" --values manifests/helm/rook-ceph-values.yaml
+}
+
 # install_metrics_server
 # install_ingress_nginx
 # install_cert_manager
-create_clusterissuer
+# create_clusterissuer
+install_rook_ceph
