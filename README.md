@@ -73,6 +73,4 @@ Hello, I'm Bogdan!
 
 ## [Day 2](day-2.md)
 
-<!--
 ## [Day 3](day-3.md)
--->
